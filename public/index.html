@@ -1,16 +1,17 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pricing | Fieldnote sample store</title>
-<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/pricing.css"></head>
+<script src="/theme.js"></script><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/pricing.css"></head>
 <body>
 <header class="bar">
   <a class="brand" href="/"><i>F</i>Fieldnote</a>
-  <nav><span class="test">Sample store, Stripe test mode</span><a href="/" class="on">Pricing</a><a href="/orders.html">Orders</a></nav>
+  <nav><span class="test">Sample store, Stripe test mode</span><a href="/" class="on">Pricing</a><a href="/orders.html">Orders</a><button class="theme" aria-label="Switch theme"></button></nav>
 </header>
 <main>
-  <section class="hero">
+  <section class="hero"><div>
     <p class="eyebrow">Pricing</p>
     <h1>Notes for people who work outside.</h1>
     <p class="lede">Buy the starter guide once, or go Pro for synced maps, offline sync and unlimited projects. Cancel any time from your billing page.</p>
+    </div>
     <div class="switch" role="tablist">
       <button data-interval="month" class="on">Monthly</button>
       <button data-interval="year">Yearly <em>2 months free</em></button>
@@ -34,7 +35,7 @@
       <button class="btn buy" data-plan="pro_month" id="pro-btn">Start Pro monthly</button>
     </article>
   </section>
-  <p class="foot">Payments are handled by Stripe Checkout. Use card 4242 4242 4242 4242, any future date and any CVC.</p>
+  <p class="foot">Payments run through Stripe Checkout in test mode. Pay with <code>4242 4242 4242 4242</code>, any future date and any CVC.</p>
   <p id="msg" class="foot err"></p>
 </main>
 <script src="/pricing.js"></script>

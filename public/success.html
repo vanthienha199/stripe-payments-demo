@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Thank you | Fieldnote sample store</title>
-<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/pages.css"></head>
+<script src="/theme.js"></script><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/pages.css"></head>
 <body>
 <header class="bar">
   <a class="brand" href="/"><i>F</i>Fieldnote</a>
-  <nav><span class="test">Sample store, Stripe test mode</span><a href="/">Pricing</a><a href="/orders.html">Orders</a></nav>
+  <nav><span class="test">Sample store, Stripe test mode</span><a href="/">Pricing</a><a href="/orders.html">Orders</a><button class="theme" aria-label="Switch theme"></button></nav>
 </header>
 <main class="narrow">
   <div class="card receipt">
@@ -13,7 +13,7 @@
     <p class="muted" id="sub">Thanks for your order. A receipt is on its way to your email.</p>
     <dl>
       <dt>Order</dt><dd id="product">Loading...</dd>
-      <dt>Amount</dt><dd id="amount"></dd>
+      <dt>Amount</dt><dd id="amount" class="num"></dd>
       <dt>Email</dt><dd id="email"></dd>
       <dt>Status</dt><dd><span class="pill pending" id="status">pending</span> <span class="muted small" id="wh">waiting for Stripe webhook</span></dd>
     </dl>
