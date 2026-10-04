@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pricing | Fieldnote sample store</title>
+<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/pricing.css"></head>
+<body>
+<header class="bar">
+  <a class="brand" href="/"><i>F</i>Fieldnote</a>
+  <nav><span class="test">Sample store, Stripe test mode</span><a href="/" class="on">Pricing</a><a href="/orders.html">Orders</a></nav>
+</header>
+<main>
+  <section class="hero">
+    <p class="eyebrow">Pricing</p>
+    <h1>Notes for people who work outside.</h1>
+    <p class="lede">Buy the starter guide once, or go Pro for synced maps, offline sync and unlimited projects. Cancel any time from your billing page.</p>
+    <div class="switch" role="tablist">
+      <button data-interval="month" class="on">Monthly</button>
+      <button data-interval="year">Yearly <em>2 months free</em></button>
+    </div>
+  </section>
+  <section class="plans">
+    <article class="plan">
+      <h3>Starter Guide</h3>
+      <p class="muted">A 60 page field guide and templates. Yours to keep.</p>
+      <div class="price"><strong>$29</strong><span>one time</span></div>
+      <ul><li>PDF and print-ready versions</li><li>12 note templates</li><li>Free updates for this edition</li></ul>
+      <button class="btn ghost buy" data-plan="guide">Buy the guide</button>
+    </article>
+    <article class="plan featured">
+      <span class="ribbon">Most popular</span>
+      <h3>Fieldnote Pro</h3>
+      <p class="muted">Everything in the guide, plus the app with sync.</p>
+      <div class="price"><strong id="pro-price">$9</strong><span id="pro-unit">per month</span></div>
+      <p class="note" id="pro-note">Billed monthly. Switch to yearly and save $18.</p>
+      <ul><li>Unlimited projects and photos</li><li>Offline maps and sync</li><li>Export to PDF and CSV</li><li>Manage or cancel in the customer portal</li></ul>
+      <button class="btn buy" data-plan="pro_month" id="pro-btn">Start Pro monthly</button>
+    </article>
+  </section>
+  <p class="foot">Payments are handled by Stripe Checkout. Use card 4242 4242 4242 4242, any future date and any CVC.</p>
+  <p id="msg" class="foot err"></p>
+</main>
+<script src="/pricing.js"></script>
+</body></html>

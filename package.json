@@ -1,0 +1,13 @@
+{
+  "name": "stripe-payments-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Sample Stripe integration: one-time checkout, monthly and yearly subscriptions, customer portal and a webhook that marks orders paid.",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "setup": "node scripts/setup-products.js",
+    "test": "node scripts/e2e.js"
+  },
+  "dependencies": { "express": "^4.21.0", "stripe": "^17.0.0" }
+}
