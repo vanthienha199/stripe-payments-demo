@@ -8,11 +8,11 @@ if (!SECRET) { console.error("Set STRIPE_WEBHOOK_SECRET to the same value the se
 const stripe = new Stripe("sk_test_seed");
 const AMOUNTS = { guide: 2900, pro_month: 900, pro_year: 9000 };
 const PEOPLE = [
-  ["pro_year", "priya.raman@kestrelworks.io", 0.85], ["guide", "marcus.oyelaran@gmail.com", 1], ["pro_month", "hannah.vu@trailcrew.org", 1],
-  ["pro_month", "diego.santos@outlook.com", 1], ["guide", "ellie.kowalczyk@proton.me", 0.8], ["pro_year", "tom.brennan@ridgeline.co", 1],
-  ["pro_month", "aisha.karimi@fieldlab.dev", 1], ["guide", "jonah.whitfield@icloud.com", 1], ["pro_month", "sofia.marchetti@gmail.com", 1],
-  ["pro_year", "kenji.mori@northfork.studio", 0.85], ["guide", "olivia.grant@yahoo.com", 1], ["pro_month", "sam.delacroix@hey.com", 1],
-  ["pro_month", "ruth.adebayo@gmail.com", 1], ["guide", "wes.lindqvist@fastmail.com", 1],
+  ["pro_year", "priya.raman@example.com", 0.85], ["guide", "marcus.oyelaran@kestrel.example", 1], ["pro_month", "hannah.vu@northfork.example", 1],
+  ["pro_month", "diego.santos@trailcrew.example", 1], ["guide", "ellie.kowalczyk@example.org", 0.8], ["pro_year", "tom.brennan@ridgeline.example", 1],
+  ["pro_month", "aisha.karimi@fieldlab.example", 1], ["guide", "jonah.whitfield@example.net", 1], ["pro_month", "sofia.marchetti@example.com", 1],
+  ["pro_year", "kenji.mori@kestrel.example", 0.85], ["guide", "olivia.grant@northfork.example", 1], ["pro_month", "sam.delacroix@trailcrew.example", 1],
+  ["pro_month", "ruth.adebayo@example.org", 1], ["guide", "wes.lindqvist@ridgeline.example", 1],
 ];
 const send = async (type, object, id) => {
   const payload = JSON.stringify({ id: id || "evt_" + Math.random().toString(36).slice(2), type, data: { object } });
