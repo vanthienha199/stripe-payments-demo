@@ -45,6 +45,12 @@ try {
   }
   const bad = await fetch(base + "/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan: "nope" }) });
   check("unknown plan rejected", bad.status === 400);
+  const q = await (await fetch(base + "/api/quote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan: "pro_year", code: "field15" }) })).json();
+  check("discount code takes 15% off the yearly plan", q.subtotal === 9000 && q.discount === 1350 && q.total === 7650);
+  const qb = await fetch(base + "/api/quote", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan: "pro_year", code: "SPRING99" }) });
+  check("unknown discount code is refused with a message", qb.status === 422 && /not valid/.test((await qb.json()).error));
+  const cb = await fetch(base + "/api/checkout", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ plan: "guide", code: "SPRING99" }) });
+  check("checkout refuses an unknown discount code", cb.status === 422);
 
   let orders = (await (await fetch(base + "/api/orders")).json()).orders;
   check("three pending orders stored", orders.length === 3 && orders.every((o) => o.status === "pending"));
@@ -67,6 +73,8 @@ try {
     check("one-time order marked paid by webhook", by.guide.status === "paid" && by.guide.email === "maya@example.com");
     check("monthly subscription active after renewal invoice", by.pro_month.status === "active" && by.pro_month.renewals === 1);
     check("yearly subscription canceled by webhook", by.pro_year.status === "canceled");
+    const outbox = (await (await fetch(base + "/api/outbox")).json()).emails;
+    check("one receipt email per paid checkout, none for the duplicate", outbox.length === 3 && outbox.some((m) => m.to === "maya@example.com" && /\$29\.00/.test(m.subject)));
   } else {
     console.log("stripe-mock returned the same session id for every call, webhook checks skipped");
     check("distinct session ids", false);

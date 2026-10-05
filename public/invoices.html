@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fieldnote, invoices</title>
+<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/invoices.css"></head>
+<body>
+<header class="top"><div class="in"><a class="brand" href="/">Fieldnote</a><nav><a href="/">Plans</a><a href="/invoices.html" class="on">Invoices</a><a href="/receipts.html">Receipts sent</a></nav></div></header>
+<main>
+  <div class="head">
+    <div><h1>Invoices</h1><p class="muted" id="sub">Every row is written by the Stripe webhook.</p></div>
+    <div class="mrr"><p class="muted">Monthly recurring revenue</p><p class="mrr-v" id="mrr">$0.00</p><svg id="spark" viewBox="0 0 220 44" aria-hidden="true"></svg></div>
+  </div>
+  <div class="table" id="wrap">
+    <table>
+      <thead><tr><th>Invoice</th><th>Customer</th><th>Plan</th><th>Date</th><th>Status</th><th class="n">Amount</th></tr></thead>
+      <tbody id="rows"></tbody>
+      <tfoot><tr><td colspan="5">Collected</td><td class="n" id="collected"></td></tr></tfoot>
+    </table>
+  </div>
+  <div class="empty" id="empty" hidden>
+    <h2>No invoices yet</h2>
+    <p class="muted">The first one appears here the moment a customer finishes checkout and Stripe confirms the payment.</p>
+    <a class="btn quiet" href="/">Open the plans page</a>
+  </div>
+  <p class="err" id="err" role="alert" hidden>Could not reach the server. The table will refresh on its own when it is back.</p>
+</main>
+<p class="foot">Fictional business, invented data.</p>
+<script src="/invoices.js"></script>
+</body></html>

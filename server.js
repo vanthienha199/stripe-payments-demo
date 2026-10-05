@@ -1,7 +1,8 @@
 import express from "express";
 import Stripe from "stripe";
-import { CATALOG } from "./catalog.js";
-import { listOrders, createOrder, updateOrder, findBy, seenEvent } from "./db.js";
+import { CATALOG, quote } from "./catalog.js";
+import { receiptEmail } from "./receipt.js";
+import { listOrders, createOrder, updateOrder, findBy, seenEvent, queueEmail, listOutbox } from "./db.js";
 
 const PORT = Number(process.env.PORT || 4242);
 const BASE_URL = process.env.BASE_URL || `http://localhost:${PORT}`;
@@ -37,13 +38,15 @@ app.post("/webhook", express.raw({ type: "application/json" }), (req, res) => {
   switch (event.type) {
     case "checkout.session.completed": {
       const paid = obj.payment_status === "paid" || obj.mode === "subscription";
-      updateOrder(obj.id, {
+      const before = findBy("session_id", obj.id);
+      const updated = updateOrder(obj.id, {
         status: paid ? "paid" : "processing",
         customer: obj.customer,
         email: obj.customer_details?.email || null,
         subscription: obj.subscription || null,
         amount_total: obj.amount_total,
       });
+      if (updated && paid && before?.status !== "paid" && updated.email) queueEmail(receiptEmail(updated));
       break;
     }
     case "checkout.session.async_payment_failed":
@@ -71,16 +74,19 @@ app.post("/api/checkout", async (req, res) => {
   try {
     const plan = req.body.plan;
     const item = CATALOG[plan];
+    if (!item) return res.status(400).json({ error: "Unknown plan" });
+    const q = quote(plan, req.body.code);
+    if (q.error) return res.status(422).json({ error: q.error });
     const price = await priceFor(plan);
     const session = await stripe.checkout.sessions.create({
       mode: item.mode,
       line_items: [{ price: price.id, quantity: 1 }],
       success_url: `${BASE_URL}/success.html?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${BASE_URL}/?canceled=1`,
-      allow_promotion_codes: true,
+      ...(q.code ? { discounts: [{ coupon: q.code }] } : { allow_promotion_codes: true }),
       ...(item.mode === "payment" ? { customer_creation: "always" } : {}),
     });
-    createOrder({ session_id: session.id, plan, product: item.label, amount: item.amount, mode: item.mode });
+    createOrder({ session_id: session.id, plan, product: item.label, amount: item.amount, amount_total: q.total, coupon: q.code, mode: item.mode });
     res.json({ url: session.url, id: session.id });
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -109,5 +115,11 @@ app.post("/api/portal", async (req, res) => {
 });
 
 app.get("/api/orders", (_req, res) => res.json({ orders: listOrders() }));
+app.post("/api/quote", (req, res) => {
+  const q = quote(req.body.plan, req.body.code);
+  res.status(q.error ? 422 : 200).json(q);
+});
+app.get("/api/outbox", (_req, res) => res.json({ emails: listOutbox() }));
+app.get("/orders.html", (_req, res) => res.redirect(301, "/invoices.html"));
 
 app.listen(PORT, () => console.log(`Stripe demo on ${BASE_URL}${mock ? " (stripe-mock)" : ""}`));

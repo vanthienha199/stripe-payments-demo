@@ -1,0 +1,28 @@
+.head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; margin-bottom: 28px; }
+.head h1 { font-size: 44px; }
+.head p { margin: 6px 0 0; }
+.mrr { text-align: right; }
+.mrr p { margin: 0; font-size: 14px; }
+.mrr p.mrr-v { font: 700 30px "Schibsted Grotesk", sans-serif; letter-spacing: -0.02em; color: var(--ink); margin: 2px 0 4px; }
+.mrr-v { font: 700 30px "Schibsted Grotesk", sans-serif; letter-spacing: -0.02em; color: var(--ink) !important; margin: 2px 0 4px !important; }
+.mrr svg { width: 220px; height: 44px; display: block; margin-left: auto; }
+.table { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+table { width: 100%; border-collapse: collapse; font-size: 15px; }
+th { text-align: left; font-weight: 600; font-size: 13.5px; color: var(--muted); padding: 12px 18px; border-bottom: 1px solid var(--line); }
+td { padding: 13px 18px; border-bottom: 1px solid var(--line); vertical-align: top; }
+tbody tr:last-child td { border-bottom: 0; }
+tbody tr { transition: background .15s ease-out; }
+tbody tr:hover { background: #FCFBF8; }
+.n { text-align: right; white-space: nowrap; }
+td .was { color: var(--faint); text-decoration: line-through; font-size: 13.5px; margin-right: 8px; }
+td .sub { display: block; color: var(--faint); font-size: 13.5px; }
+.st { white-space: nowrap; }
+.st::before { content: ""; display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 8px; background: var(--faint); vertical-align: 1px; }
+.st.paid::before, .st.active::before { background: var(--plum); }
+.st.canceled, .st.expired, .st.failed { color: var(--faint); }
+.st.pending { color: var(--muted); }
+tfoot td { font-weight: 600; border-top: 1.5px solid var(--ink); border-bottom: 0; }
+.empty { background: var(--surface); border: 1px dashed #D9D5CC; border-radius: 10px; padding: 56px 24px; text-align: center; }
+.empty h2 { font-size: 24px; } .empty p { max-width: 420px; margin: 8px auto 20px; }
+.err { margin-top: 16px; color: var(--bad); background: var(--bad-soft); padding: 10px 14px; border-radius: 8px; }
+@media (max-width: 760px) { .head { flex-direction: column; align-items: flex-start; } .mrr { text-align: left; } .mrr svg { margin-left: 0; } th:nth-child(3), td:nth-child(3), th:nth-child(4), td:nth-child(4) { display: none; } }

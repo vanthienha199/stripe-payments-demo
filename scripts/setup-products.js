@@ -18,3 +18,9 @@ for (const item of Object.values(CATALOG)) {
   });
   console.log("created", item.lookup_key);
 }
+
+import { COUPONS } from "../catalog.js";
+for (const [id, c] of Object.entries(COUPONS)) {
+  try { await stripe.coupons.retrieve(id); console.log("exists coupon", id); }
+  catch { await stripe.coupons.create({ id, percent_off: c.percent_off, duration: "once", name: c.label }); console.log("created coupon", id); }
+}

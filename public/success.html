@@ -1,27 +1,42 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Thank you | Fieldnote sample store</title>
-<script src="/theme.js"></script><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/pages.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fieldnote, payment received</title>
+<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/checkout.css">
+<style>.done{max-width:440px;margin:0 auto}.done h1{font-size:34px;margin-bottom:6px}.done .receipt{position:static;margin-top:28px}.done dl{display:grid;grid-template-columns:110px 1fr;gap:10px 12px;margin:0}.done dt{color:var(--muted)}.done dd{margin:0;font-weight:500}.acts{display:flex;gap:10px;margin-top:22px}</style></head>
 <body>
-<header class="bar">
-  <a class="brand" href="/"><i>F</i>Fieldnote</a>
-  <nav><span class="test">Sample store, Stripe test mode</span><a href="/">Pricing</a><a href="/orders.html">Orders</a><button class="theme" aria-label="Switch theme"></button></nav>
-</header>
-<main class="narrow">
-  <div class="card receipt">
-    <div class="check"></div>
-    <h1>Payment received</h1>
-    <p class="muted" id="sub">Thanks for your order. A receipt is on its way to your email.</p>
-    <dl>
-      <dt>Order</dt><dd id="product">Loading...</dd>
-      <dt>Amount</dt><dd id="amount" class="num"></dd>
-      <dt>Email</dt><dd id="email"></dd>
-      <dt>Status</dt><dd><span class="pill pending" id="status">pending</span> <span class="muted small" id="wh">waiting for Stripe webhook</span></dd>
-    </dl>
-    <div class="row">
-      <button class="btn" id="portal" hidden>Manage subscription</button>
-      <a class="btn ghost" href="/orders.html">See all orders</a>
-    </div>
+<header class="top"><div class="in"><a class="brand" href="/">Fieldnote</a><nav><a href="/">Plans</a><a href="/invoices.html">Invoices</a><a href="/receipts.html">Receipts sent</a></nav></div></header>
+<main><div class="done">
+  <h1 id="h">Payment received</h1>
+  <p class="muted" id="sub">Waiting for Stripe to confirm the payment...</p>
+  <div class="receipt"><p class="r-head">Receipt</p>
+    <dl><dt>Plan</dt><dd id="plan"></dd><dt>Paid</dt><dd id="amount"></dd><dt>Email</dt><dd id="email"></dd><dt>Invoice</dt><dd class="id" id="inv"></dd></dl>
   </div>
-</main>
-<script src="/success.js"></script>
+  <div class="acts"><button class="btn" id="portal" hidden>Manage billing</button><a class="btn quiet" href="/invoices.html">See invoices</a></div>
+  <p class="err" id="err" role="alert" hidden></p>
+</div></main>
+<p class="foot">Fictional business, invented data.</p>
+<script>
+const id = new URLSearchParams(location.search).get("session_id");
+const money = (c) => "$" + (c / 100).toFixed(2);
+async function load() {
+  const r = await fetch("/api/session/" + encodeURIComponent(id || ""));
+  const d = await r.json();
+  if (!r.ok) { document.getElementById("h").textContent = "We could not find that payment"; document.getElementById("sub").textContent = "If you were charged, the receipt email has the details."; return; }
+  const o = d.order || {};
+  const plan = o.plan === "guide" ? "Field guide" : o.plan === "pro_year" ? "Pro, yearly" : "Pro, monthly";
+  document.getElementById("plan").textContent = plan;
+  document.getElementById("amount").textContent = money(o.amount_total ?? d.amount_total ?? 0) + (o.mode === "subscription" ? (o.plan === "pro_year" ? " for the year" : " this month") : "");
+  document.getElementById("email").textContent = o.email || d.email || "";
+  document.getElementById("inv").textContent = "in_" + (o.session_id || id).slice(-10);
+  const confirmed = o.status && o.status !== "pending";
+  document.getElementById("sub").textContent = confirmed ? `Thanks${o.email ? ", a receipt is on its way to " + o.email : ""}.` : "Waiting for Stripe to confirm the payment...";
+  document.getElementById("portal").hidden = !(o.mode === "subscription" && o.customer);
+  if (!confirmed) setTimeout(load, 2000);
+}
+document.getElementById("portal").addEventListener("click", async () => {
+  const r = await fetch("/api/portal", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ session_id: id }) });
+  const d = await r.json();
+  if (d.url) location = d.url; else { const e = document.getElementById("err"); e.textContent = d.error || "The billing page did not open."; e.hidden = false; }
+});
+load();
+</script>
 </body></html>

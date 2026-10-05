@@ -4,7 +4,7 @@ import path from "node:path";
 const FILE = process.env.DB_FILE || path.resolve("data/orders.json");
 
 function read() {
-  try { return JSON.parse(fs.readFileSync(FILE, "utf8")); } catch { return { orders: [], events: [] }; }
+  try { return { outbox: [], ...JSON.parse(fs.readFileSync(FILE, "utf8")) }; } catch { return { orders: [], events: [], outbox: [] }; }
 }
 
 function write(db) {
@@ -43,4 +43,15 @@ export function seenEvent(id) {
   if (db.events.length > 500) db.events = db.events.slice(-500);
   write(db);
   return false;
+}
+
+export function queueEmail(email) {
+  const db = read();
+  db.outbox.unshift({ ...email, queued: Date.now() });
+  db.outbox = db.outbox.slice(0, 50);
+  write(db);
+}
+
+export function listOutbox() {
+  return read().outbox;
 }

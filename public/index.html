@@ -1,42 +1,34 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Pricing | Fieldnote sample store</title>
-<script src="/theme.js"></script><link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/pricing.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Fieldnote, choose a plan</title>
+<link rel="stylesheet" href="/style.css"><link rel="stylesheet" href="/checkout.css"></head>
 <body>
-<header class="bar">
-  <a class="brand" href="/"><i>F</i>Fieldnote</a>
-  <nav><span class="test">Sample store, Stripe test mode</span><a href="/" class="on">Pricing</a><a href="/orders.html">Orders</a><button class="theme" aria-label="Switch theme"></button></nav>
-</header>
-<main>
-  <section class="hero"><div>
-    <p class="eyebrow">Pricing</p>
-    <h1>Notes for people who work outside.</h1>
-    <p class="lede">Buy the starter guide once, or go Pro for synced maps, offline sync and unlimited projects. Cancel any time from your billing page.</p>
+<header class="top"><div class="in"><a class="brand" href="/">Fieldnote</a><nav><a href="/" class="on">Plans</a><a href="/invoices.html">Invoices</a><a href="/receipts.html">Receipts sent</a></nav></div></header>
+<main class="checkout">
+  <section>
+    <h1>Notes for people who work outside</h1>
+    <p class="lede muted">Buy the field guide once, or go Pro for offline maps, synced notes and unlimited projects. Pro cancels any time from your billing page.</p>
+    <div class="plans" role="radiogroup" aria-label="Plan">
+      <label class="plan"><input type="radio" name="plan" value="guide"><span class="name">Field guide</span><span class="desc">60 pages and 12 templates, yours to keep</span><span class="price">$29 once</span></label>
+      <label class="plan"><input type="radio" name="plan" value="pro_month" checked><span class="name">Pro, monthly</span><span class="desc">Everything in the guide, plus the app with sync</span><span class="price">$9 a month</span></label>
+      <label class="plan"><input type="radio" name="plan" value="pro_year"><span class="name">Pro, yearly</span><span class="desc">Two months free compared with monthly</span><span class="price">$90 a year</span></label>
     </div>
-    <div class="switch" role="tablist">
-      <button data-interval="month" class="on">Monthly</button>
-      <button data-interval="year">Yearly <em>2 months free</em></button>
-    </div>
+    <p class="note muted">Payment runs on Stripe Checkout in test mode. Use card 4242 4242 4242 4242 with any future date and any CVC.</p>
   </section>
-  <section class="plans">
-    <article class="plan">
-      <h3>Starter Guide</h3>
-      <p class="muted">A 60 page field guide and templates. Yours to keep.</p>
-      <div class="price"><strong>$29</strong><span>one time</span></div>
-      <ul><li>PDF and print-ready versions</li><li>12 note templates</li><li>Free updates for this edition</li></ul>
-      <button class="btn ghost buy" data-plan="guide">Buy the guide</button>
-    </article>
-    <article class="plan featured">
-      <span class="ribbon">Most popular</span>
-      <h3>Fieldnote Pro</h3>
-      <p class="muted">Everything in the guide, plus the app with sync.</p>
-      <div class="price"><strong id="pro-price">$9</strong><span id="pro-unit">per month</span></div>
-      <p class="note" id="pro-note">Billed monthly. Switch to yearly and save $18.</p>
-      <ul><li>Unlimited projects and photos</li><li>Offline maps and sync</li><li>Export to PDF and CSV</li><li>Manage or cancel in the customer portal</li></ul>
-      <button class="btn buy" data-plan="pro_month" id="pro-btn">Start Pro monthly</button>
-    </article>
-  </section>
-  <p class="foot">Payments run through Stripe Checkout in test mode. Pay with <code>4242 4242 4242 4242</code>, any future date and any CVC.</p>
-  <p id="msg" class="foot err"></p>
+  <aside class="receipt" aria-live="polite">
+    <p class="r-head">Order summary</p>
+    <div class="r-line"><span id="r-item">Pro, monthly</span><span id="r-sub">$9.00</span></div>
+    <div class="r-line disc" id="r-disc" hidden><span id="r-disc-label">Discount</span><span id="r-disc-amt"></span></div>
+    <form id="coupon" class="coupon" novalidate>
+      <label for="code">Discount code</label>
+      <div class="row"><input id="code" name="code" autocomplete="off" spellcheck="false" placeholder="Optional"><button class="btn quiet" type="submit">Apply</button></div>
+      <p class="err" id="code-err" role="alert" hidden></p>
+    </form>
+    <div class="r-total"><span>Total due today</span><span class="total" id="total" aria-label="Total"></span></div>
+    <p class="r-when muted" id="r-when">Then $9.00 every month.</p>
+    <button class="btn pay" id="pay">Continue to payment</button>
+    <p class="err" id="pay-err" role="alert" hidden></p>
+  </aside>
 </main>
-<script src="/pricing.js"></script>
+<p class="foot">Fictional business, invented data.</p>
+<script src="/checkout.js"></script>
 </body></html>
